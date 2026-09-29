@@ -234,6 +234,7 @@
   "changelog.new": "New",
   "changelog.changes.one": "{0} change",
   "changelog.changes.other": "{0} changes",
+  "changelog.r1110.1": "Added a Buy Me a Coffee button under Patreon on the About page",
   "changelog.r1100.1": "Fixed an issue where the character could stop too far from an NPC to talk to it and then skip that NPC",
   "changelog.r1000.1": "Initial release",
   "about.support.title": "Made with love and care",

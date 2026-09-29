@@ -234,6 +234,7 @@
   "changelog.new": "新着",
   "changelog.changes.one": "{0}件の変更",
   "changelog.changes.other": "{0}件の変更",
+  "changelog.r1110.1": "情報ページのPatreonの下にBuy Me a Coffeeボタンを追加",
   "changelog.r1100.1": "キャラクターがNPCから離れすぎた位置で止まって話しかけられず、そのNPCをスキップしてしまう問題を修正しました",
   "changelog.r1000.1": "初回リリース",
   "about.support.title": "愛情と心を込めて",

@@ -234,6 +234,7 @@
   "changelog.new": "Nouveau",
   "changelog.changes.one": "{0} changement",
   "changelog.changes.other": "{0} changements",
+  "changelog.r1110.1": "Ajout d'un bouton Buy Me a Coffee sous Patreon sur la page À propos",
   "changelog.r1100.1": "Correction d'un problème où le personnage pouvait s'arrêter trop loin d'un PNJ pour lui parler, puis le passait",
   "changelog.r1000.1": "Première version",
   "about.support.title": "Fait avec amour et soin",
