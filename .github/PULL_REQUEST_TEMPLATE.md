@@ -19,4 +19,4 @@ Minimum steps a reviewer can run to verify the change. Testing usually means pic
 - [ ] `dotnet build -c Release` passes
 - [ ] Verified in-game against at least one NPC with the affected rules
 - [ ] If this changes user-visible behavior, README is updated
-- [ ] If this touches the automation loop, relevant `[AutoTripleTriadGrind]` log lines make the sequence auditable
+- [ ] If this touches the automation loop, relevant `[TripleTriadRoute]` log lines make the sequence auditable

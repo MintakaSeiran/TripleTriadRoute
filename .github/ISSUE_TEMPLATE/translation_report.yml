@@ -2,7 +2,7 @@ name: Translation fix
 description: Report wrong, awkward, or untranslated text in one of the nine languages.
 title: "[Translation] "
 labels: ["bug"]
-assignees: ["XeldarAlz"]
+assignees: ["MintakaSeiran"]
 body:
   - type: markdown
     attributes:

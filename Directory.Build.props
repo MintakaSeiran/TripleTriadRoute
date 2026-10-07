@@ -15,12 +15,12 @@
   -->
 
   <PropertyGroup Label="Identity">
-    <Version>1.1.1.0</Version>
-    <Authors>XeldarAlz</Authors>
+    <Version>1.0.0.0</Version>
+    <Authors>Triple Triad Route contributors</Authors>
     <Copyright>Copyright (c) XeldarAlz</Copyright>
-    <PackageProjectUrl>https://github.com/XeldarAlz/FFXIV-AutoTripleTriadGrind</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/MintakaSeiran/TripleTriadRoute</PackageProjectUrl>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/XeldarAlz/FFXIV-AutoTripleTriadGrind</RepositoryUrl>
+    <RepositoryUrl>https://github.com/MintakaSeiran/TripleTriadRoute</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 

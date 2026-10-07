@@ -1,0 +1,17 @@
+{
+  "Author": "Triple Triad Route contributors",
+  "Name": "Triple Triad Route",
+  "InternalName": "TripleTriadRoute",
+  "Punchline": "Japanese menu support and runtime NPC availability checks.",
+  "Description": "Independent fork. Based on Auto Triple Triad Grind by XeldarAlz. Adds Japanese challenge recognition and safe session-only unavailable NPC handling. Not endorsed by the original author.",
+  "ApplicableVersion": "any",
+  "RepoUrl": "https://github.com/MintakaSeiran/TripleTriadRoute",
+  "Tags": [
+    "Triple Triad",
+    "Cards",
+    "Gold Saucer",
+    "MGP",
+    "Collection",
+    "Automation"
+  ]
+}

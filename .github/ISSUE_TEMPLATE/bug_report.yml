@@ -2,16 +2,16 @@ name: Bug report
 description: Something's broken or behaving unexpectedly.
 title: "[Bug] "
 labels: ["bug"]
-assignees: ["XeldarAlz"]
+assignees: ["MintakaSeiran"]
 body:
   - type: markdown
     attributes:
       value: |
         Thanks for taking the time to file a bug. Please fill out as much as you can; it makes a huge difference.
 
-        If you're not sure whether it's a bug or expected behavior, prefer the [Q&A discussions](https://github.com/XeldarAlz/FFXIV-AutoTripleTriadGrind/discussions/new?category=q-a); triage is faster there.
+        If you're not sure whether it's a bug or expected behavior, prefer the Q&A discussions (see this fork's README); triage is faster there.
 
-        For security issues, please use [private vulnerability reporting](https://github.com/XeldarAlz/FFXIV-AutoTripleTriadGrind/security/advisories/new) instead.
+        For security issues, please use private vulnerability reporting (see this fork's README) instead.
 
   - type: textarea
     id: what-happened
@@ -39,7 +39,7 @@ body:
     id: plugin-version
     attributes:
       label: Plugin version
-      description: Shown in `/xlplugins` next to "Auto Triple Triad Grind".
+      description: Shown in `/xlplugins` next to "Triple Triad Route".
       options:
         - 1.1.1.0
         - 1.1.0.0
@@ -95,7 +95,7 @@ body:
         **If you can provide any of these, it turns guesswork into a fix.**
 
         - **Plugin console**: open `/attg log`, press *Copy log* and paste the result into the console field below. It already includes the plugin version, Dalamud version and zone.
-        - **Dalamud log**: open `/xllog`, click the *Open log folder* button at the bottom-right, attach `dalamud.log`. Filter by `[AutoTripleTriadGrind]` if you want to trim it down.
+        - **Dalamud log**: open `/xllog`, click the *Open log folder* button at the bottom-right, attach `dalamud.log`. Filter by `[TripleTriadRoute]` if you want to trim it down.
         - **Screenshots / short clip** if the issue is visual (selection state, wrong tooltip, frozen card, etc.)
         - **Other plugins active** that touch movement, teleport, dialogs, or input, which helps rule out conflicts.
 
