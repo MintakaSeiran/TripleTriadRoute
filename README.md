@@ -1,13 +1,13 @@
-# Triple Triad Route
+﻿# Triple Triad Route
 
 日本語メニュー認識と、NPCの現在の対戦可否確認を追加した独立改修版です。元作者による公式版・公認版・後継版ではありません。
 
 Based on Auto Triple Triad Grind by XeldarAlz
 https://github.com/XeldarAlz/FFXIV-AutoTripleTriadGrind
 
-元ソース: `9bc2e3f45bcf4d837b2a2ed3315a669c811421ed`（上流1.1.1.0）。改修版1.0.0.1、内部名・DLL名 `TripleTriadRoute`。作業ブランチ `fix/japanese-triad-runtime-availability`。
+元ソース: `9bc2e3f45bcf4d837b2a2ed3315a669c811421ed`（上流1.1.1.0）。改修版1.0.0.2、内部名・DLL名 `TripleTriadRoute`。作業ブランチ `fix/japanese-triad-runtime-availability`。
 
-**状態:** ローカル改修・ビルド・自動テスト済み。ゲーム内試験は未実施。GitHub上のFork: [https://github.com/MintakaSeiran/TripleTriadRoute](https://github.com/MintakaSeiran/TripleTriadRoute)。改修は上記作業ブランチに置きます。現在の配布は v1.0.0.1（実機未確認のプレビュー版）です。
+**状態:** ローカル改修・ビルド・自動テスト済み。ゲーム内試験は未実施。GitHub上のFork: [https://github.com/MintakaSeiran/TripleTriadRoute](https://github.com/MintakaSeiran/TripleTriadRoute)。改修は上記作業ブランチに置きます。現在の配布は v1.0.0.2（実機未確認のプレビュー版）です。
 
 ## v1.0.0.1: 通常会話だけのNPCを除外
 
@@ -55,7 +55,7 @@ Dalamudのカスタムプラグインリポジトリに次のURLを追加し、T
 https://raw.githubusercontent.com/MintakaSeiran/TripleTriadRoute/fix/japanese-triad-runtime-availability/repo.json
 ```
 
-リリース: https://github.com/MintakaSeiran/TripleTriadRoute/releases/tag/v1.0.0.1
+リリース: https://github.com/MintakaSeiran/TripleTriadRoute/releases/tag/v1.0.0.2
 
 開発用の導入は、ビルド出力 `TripleTriadRoute/bin/Release/TripleTriadRoute.dll` をDalamud開発用プラグインとして登録する方法です。付属DLL・Localization・Fontsを含む出力一式を保持してください。移動用外部プラグインは `/ttroute deps` で確認できます。元版と同時に自動操作を実行しないでください。
 
@@ -75,7 +75,7 @@ git submodule update --init --recursive
 & $triadDotnet test TripleTriadRoute.Tests/TripleTriadRoute.Tests.csproj -c Release
 ```
 
-Releaseビルド: 警告0、エラー0。自動テスト60件成功。初回は通信制限によるNU1301と、監査取得失敗のNU1900がありましたが、通信可能な復元で解消しました。監査は無効化していません。
+Releaseビルド: 警告0、エラー0。自動テスト61件成功。初回は通信制限によるNU1301と、監査取得失敗のNU1900がありましたが、通信可能な復元で解消しました。監査は無効化していません。
 
 テストは実ソースのメニュー判定、再計画、事前条件、セッション保持と、既存ソルバーを対象にします。ゲームサービス境界はスタブです。実Addon操作、移動IPC、Farm非同期ループ、Challenge→デッキ→対戦の統合動作を証明するものではありません。
 
@@ -107,3 +107,5 @@ v1.0.0.1のGitHubプレビューリリースへ `latest.zip` を公開し、repo
 ## ライセンスとクレジット
 
 Copyright (c) 2026 Xeldar Alz。元の [LICENSE.md](LICENSE.md)、[NOTICE](NOTICE)、[TRADEMARK.md](TRADEMARK.md)、[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) は変更せず保持しています。READMEとAboutの両方に元作者・元リポジトリを明記しています。
+## v1.0.0.2
+通常会話の画面検出回数ではなく実際のInteract呼び出しを数え、5回後も対戦画面が出なければTriadUnavailable（未開放・現在対戦不可）としてセッション除外します。6回目の呼びかけは行いません。対戦画面表示に成功したら回数をリセットします。時間切れ時も通常会話を閉じてからスキップし、Collectは再計画、Farmは次NPCへ進みます。未知の閉鎖不能UIは従来通り安全停止します。既知の非対戦メニューは従来の2回確認を維持します。実際のクエスト未開放を断定するものではありません。実機未確認。

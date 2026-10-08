@@ -1,10 +1,10 @@
-<Project>
+﻿<Project>
 
   <!-- Fork releases are published from a verified local build.
        Keep the four-part Version in sync with the generated manifest and repo.json. -->
 
   <PropertyGroup Label="Identity">
-    <Version>1.0.0.1</Version>
+    <Version>1.0.0.2</Version>
     <Authors>Triple Triad Route contributors</Authors>
     <Copyright>Copyright (c) XeldarAlz</Copyright>
     <PackageProjectUrl>https://github.com/MintakaSeiran/TripleTriadRoute</PackageProjectUrl>

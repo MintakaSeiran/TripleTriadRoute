@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using AutoTripleTriadGrind.Core.Game.Ops;
 using AutoTripleTriadGrind.Core.Planning;
 using AutoTripleTriadGrind.Core.Tasks;
@@ -9,6 +9,22 @@ namespace AutoTripleTriadGrind.Tests;
 public class AvailabilityTests
 {
     private static TriadMenuSnapshot Menu(params string[] entries) => new("SelectString", entries, new uint[entries.Length]);
+
+    [Fact]
+    public void InteractionBudgetRequiresFiveCallsAndResetsAfterChallenge()
+    {
+        var budget = new TriadInteractionBudget();
+        for (var i = 0; i < 5; i++)
+        {
+            Assert.False(budget.Exhausted);
+            budget.RecordInteraction();
+        }
+        Assert.True(budget.Exhausted);
+        Assert.Equal(5, budget.Attempts);
+        budget.Reset();
+        Assert.False(budget.Exhausted);
+        Assert.Equal(0, budget.Attempts);
+    }
 
     [Fact]
     public void TwoCompletedTalkOnlyInteractionsSkipNpc()

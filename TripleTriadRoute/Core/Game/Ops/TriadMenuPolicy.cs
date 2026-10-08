@@ -1,4 +1,4 @@
-using AutoTripleTriadGrind.Core.Planning;
+﻿using AutoTripleTriadGrind.Core.Planning;
 
 namespace AutoTripleTriadGrind.Core.Game.Ops;
 
@@ -62,4 +62,13 @@ internal sealed class TriadAvailabilityCheck
         }
         return menu.Fingerprint == firstMenu ? SkipReason.TriadUnavailable : SkipReason.MenuRecognitionFailed;
     }
+}
+
+// Counts Interact calls, not Talk frames or lines; survives OpenChallenge retries.
+internal sealed class TriadInteractionBudget
+{
+    public int Attempts { get; private set; }
+    public bool Exhausted => Attempts >= 5;
+    public void RecordInteraction() => Attempts++;
+    public void Reset() => Attempts = 0;
 }

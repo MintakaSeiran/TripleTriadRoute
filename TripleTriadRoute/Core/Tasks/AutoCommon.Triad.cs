@@ -1,4 +1,4 @@
-using AutoTripleTriadGrind.Core.Game.Ops;
+﻿using AutoTripleTriadGrind.Core.Game.Ops;
 using AutoTripleTriadGrind.Core.Planning;
 using AutoTripleTriadGrind.Core.Triad.Addons;
 using AutoTripleTriadGrind.Core.Triad.Data;
@@ -33,6 +33,7 @@ internal sealed class TriadNpcRun(ushort npcIndex, Func<TriadNpcRun, bool> goalM
     public int Matches;
     public int LossStreak;
     public int InteractFailures;
+    public readonly TriadInteractionBudget InteractionBudget = new();
     public int FailedSeries;
     public SkipReason ChallengeFailure;
     public readonly TriadAvailabilityCheck Availability = new();
@@ -128,6 +129,7 @@ public abstract partial class AutoCommon
             }
 
             run.InteractFailures = 0;
+            run.InteractionBudget.Reset();
             var matchesBefore = run.Matches;
             var leave = await PlayMatchSeries(configuration, run, session, progress);
             await SettleDialog();
@@ -225,9 +227,6 @@ public abstract partial class AutoCommon
         var deadline = Environment.TickCount64 + ChallengeOpenTimeoutMs;
         var lastInteract = 0L;
         var interacted = false;
-        var sawTalk = false;
-        var sawSelection = false;
-        var dialogueClosedAt = 0L;
         var availability = run.Availability;
         run.ChallengeFailure = SkipReason.None;
         var approached = false;
@@ -246,33 +245,7 @@ public abstract partial class AutoCommon
                 return false;
             }
             var step = interacted ? TriadDialog.Advance() : TriadDialog.Step.Nothing;
-            if (step == TriadDialog.Step.TalkHandled) sawTalk = true;
-            if (step is TriadDialog.Step.Handled or TriadDialog.Step.SelectedTriad or TriadDialog.Step.UnknownMenu)
-                sawSelection = true;
-            if (step != TriadDialog.Step.Nothing) dialogueClosedAt = 0;
             if (step == TriadDialog.Step.SelectedTriad) availability.SelectedTriad = true;
-            if (step == TriadDialog.Step.Nothing && interacted && sawTalk && !sawSelection && NpcInteraction.PlayerReady())
-            {
-                // Wait for delayed menus before counting a completed, Talk-only interaction.
-                if (dialogueClosedAt == 0) dialogueClosedAt = Environment.TickCount64;
-                if (Environment.TickCount64 - dialogueClosedAt < 750)
-                {
-                    await NextFrame(5);
-                    continue;
-                }
-                var reason = availability.ObserveTalkOnly();
-                Warn($"[TripleTriadRoute] {run.Name} (ENpcBaseId {run.Npc.ENpcBaseId}, TriadRowId {run.Npc.TriadRowId}, territory {Svc.ClientState.TerritoryType}): Talk closed without a challenge/menu. Attempt {availability.Attempts}/2; {reason}.");
-                if (reason != SkipReason.None)
-                {
-                    run.ChallengeFailure = reason;
-                    return false;
-                }
-                interacted = false;
-                sawTalk = sawSelection = false;
-                dialogueClosedAt = 0;
-                lastInteract = 0;
-                deadline = Environment.TickCount64 + ChallengeOpenTimeoutMs;
-            }
             if (step == TriadDialog.Step.UnknownMenu)
             {
                 var menu = TriadDialog.CurrentMenu();
@@ -293,8 +266,6 @@ public abstract partial class AutoCommon
                 }
                 await DelayMs(750);
                 interacted = false;
-                sawTalk = sawSelection = false;
-                dialogueClosedAt = 0;
                 approached = false;
                 lastInteract = 0;
                 deadline = Environment.TickCount64 + ChallengeOpenTimeoutMs;
@@ -311,8 +282,18 @@ public abstract partial class AutoCommon
                     continue;
                 }
 
+                // Count actual interaction calls, even if Talk was closed between polling frames.
+                // Never issue a sixth interaction. Give the fifth response time to open first.
+                if (run.InteractionBudget.Exhausted)
+                {
+                    run.ChallengeFailure = SkipReason.TriadUnavailable;
+                    Warn($"{run.Name}: no Triple Triad dialog after 5 interactions; excluding for this session (未開放・現在対戦不可).");
+                    return false;
+                }
                 NpcInteraction.Target(target);
                 NpcInteraction.Interact(target);
+                run.InteractionBudget.RecordInteraction();
+                Warn($"{run.Name}: interaction {run.InteractionBudget.Attempts}/5 awaiting Triple Triad dialog.");
                 lastInteract = Environment.TickCount64;
                 interacted = true;
             }
@@ -321,6 +302,20 @@ public abstract partial class AutoCommon
         }
 
         Warn($"The challenge window for {run.Name} did not open.");
+        // Finish ordinary Talk before leaving, rather than treating it as an unknown menu.
+        var closeDeadline = Environment.TickCount64 + DialogSettleTimeoutMs;
+        while (Environment.TickCount64 < closeDeadline && !CancelToken.IsCancellationRequested)
+        {
+            if (TriadAddons.AnyMatchWindowVisible()) return true;
+            var closing = TriadDialog.Advance(towardChallenge: false);
+            if (closing is TriadDialog.Step.Nothing or TriadDialog.Step.UnknownMenu) break;
+            await NextFrame(5);
+        }
+        if (!TriadDialog.AnyOpen() && run.InteractionBudget.Exhausted)
+        {
+            run.ChallengeFailure = SkipReason.TriadUnavailable;
+            return false;
+        }
         // Reopen a clean dialogue on the existing interaction retry budget.
         if (TriadDialog.AnyOpen() && !await CloseObservedMenu(TriadDialog.CurrentMenu()))
             run.ChallengeFailure = availability.SelectedTriad ? SkipReason.InteractFailed : SkipReason.MenuRecognitionFailed;

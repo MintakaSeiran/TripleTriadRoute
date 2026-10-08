@@ -112,3 +112,5 @@ AutoTripleTriadGrind/ → TripleTriadRoute/、AutoTripleTriadGrind.Tests/ → Tr
 ## v1.0.0.1（通常会話のみのNPC）
 
 TriadDialog.csにTalkHandledを追加し、AutoCommon.Triad.csで通常会話終了後750msの安定待ちと2回の独立Interactを確認。TriadMenuPolicy.csのObserveTalkOnlyでTriadUnavailableへ分類し、既存のセッション除外・再計画へ返す。AvailabilityTests.csに通常会話2回、対戦選択後、メニューと通常会話の混在の回帰テストを追加。Directory.Build.propsとrepo.jsonの版を1.0.0.1へ更新。Releaseビルド警告0・エラー0、60テスト成功。実機再確認は未実施。
+## v1.0.0.2
+通常会話の画面検出回数ではなく実際のInteract呼び出しを数え、5回後も対戦画面が出なければTriadUnavailable（未開放・現在対戦不可）としてセッション除外します。6回目の呼びかけは行いません。対戦画面表示に成功したら回数をリセットします。時間切れ時も通常会話を閉じてからスキップし、Collectは再計画、Farmは次NPCへ進みます。未知の閉鎖不能UIは従来通り安全停止します。既知の非対戦メニューは従来の2回確認を維持します。実際のクエスト未開放を断定するものではありません。実機未確認。
