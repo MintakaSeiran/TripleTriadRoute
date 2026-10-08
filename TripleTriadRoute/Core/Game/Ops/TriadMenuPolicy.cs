@@ -35,6 +35,19 @@ internal sealed class TriadAvailabilityCheck
     public int Attempts { get; private set; }
     public bool SelectedTriad { get; set; }
 
+    // A complete interaction showed Talk, then closed without any selection or challenge.
+    public SkipReason ObserveTalkOnly()
+    {
+        if (SelectedTriad) return SkipReason.InteractFailed;
+        Attempts++;
+        if (Attempts == 1)
+        {
+            firstMenu = "TalkOnly";
+            return SkipReason.None;
+        }
+        return firstMenu == "TalkOnly" ? SkipReason.TriadUnavailable : SkipReason.MenuRecognitionFailed;
+    }
+
     // Called once per independently opened menu, never once per frame.
     public SkipReason Observe(TriadMenuSnapshot? menu)
     {

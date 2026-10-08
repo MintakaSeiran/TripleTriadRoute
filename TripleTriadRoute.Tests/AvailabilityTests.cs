@@ -10,6 +10,30 @@ public class AvailabilityTests
 {
     private static TriadMenuSnapshot Menu(params string[] entries) => new("SelectString", entries, new uint[entries.Length]);
 
+    [Fact]
+    public void TwoCompletedTalkOnlyInteractionsSkipNpc()
+    {
+        var check = new TriadAvailabilityCheck();
+        Assert.Equal(SkipReason.None, check.ObserveTalkOnly());
+        Assert.Equal(SkipReason.TriadUnavailable, check.ObserveTalkOnly());
+        Assert.Equal(2, check.Attempts);
+    }
+
+    [Fact]
+    public void TalkAfterSelectedChallengeIsInteractionFailure()
+        => Assert.Equal(SkipReason.InteractFailed, new TriadAvailabilityCheck { SelectedTriad = true }.ObserveTalkOnly());
+
+    [Fact]
+    public void MixedMenuAndTalkEvidenceIsNotUnavailable()
+    {
+        var check = new TriadAvailabilityCheck();
+        check.Observe(Menu("話す", "キャンセル"));
+        Assert.Equal(SkipReason.MenuRecognitionFailed, check.ObserveTalkOnly());
+        check = new TriadAvailabilityCheck();
+        check.ObserveTalkOnly();
+        Assert.Equal(SkipReason.MenuRecognitionFailed, check.Observe(Menu("話す", "キャンセル")));
+    }
+
     [Theory]
     [InlineData("カード対戦を申し込む")]
     [InlineData("カード対戦")]

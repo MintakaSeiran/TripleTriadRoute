@@ -27,6 +27,7 @@ internal static unsafe class TriadDialog
         Handled,
         UnknownMenu,
         SelectedTriad,
+        TalkHandled,
     }
 
     // Only recognized challenge or cancel entries may be selected.
@@ -72,7 +73,7 @@ internal static unsafe class TriadDialog
                 new AddonMaster.Talk(talk).Click();
             }
 
-            return Step.Handled;
+            return Step.TalkHandled;
         }
 
         return Step.Nothing;

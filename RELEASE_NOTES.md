@@ -1,13 +1,10 @@
-# v1.0.0.0 初回配布
+# v1.0.0.1 通常会話だけのNPCをスキップ
 
-日本語の「カード対戦」認識、2回の現地確認による対戦不可判定、認識失敗との区別、Collect再計画、Farmのスキップ、セッション限定除外を追加。
+ワワラゴなど通常会話だけを繰り返すNPCは、会話が閉じた後750ms待って再確認し、2回ともメニュー・対戦画面がなければ今回のセッションから除外します。Collectは再計画、Farmは次のNPCへ継続します。新規Start時は再確認します。
 
-Dalamud API 15 / .NET 10 / x64。Releaseビルド警告0・エラー0、ゲーム非依存テスト57件成功。ゲーム内動作・IPC互換性は未確認。
+未知の選択肢は押しません。安全に閉じられない未知UIでは従来の安全停止を維持します。
 
-独立版です。Based on Auto Triple Triad Grind by XeldarAlz:
+API15 / .NET10 / x64。ビルド警告0・エラー0、60テスト成功。実機での再確認は未実施。
+
+Based on Auto Triple Triad Grind by XeldarAlz
 https://github.com/XeldarAlz/FFXIV-AutoTripleTriadGrind
-
-カスタムプラグインリポジトリ:
-https://raw.githubusercontent.com/MintakaSeiran/TripleTriadRoute/fix/japanese-triad-runtime-availability/repo.json
-
-コマンド: /ttroute

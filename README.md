@@ -5,9 +5,15 @@
 Based on Auto Triple Triad Grind by XeldarAlz
 https://github.com/XeldarAlz/FFXIV-AutoTripleTriadGrind
 
-元ソース: `9bc2e3f45bcf4d837b2a2ed3315a669c811421ed`（上流1.1.1.0）。改修版1.0.0.0、内部名・DLL名 `TripleTriadRoute`。作業ブランチ `fix/japanese-triad-runtime-availability`。
+元ソース: `9bc2e3f45bcf4d837b2a2ed3315a669c811421ed`（上流1.1.1.0）。改修版1.0.0.1、内部名・DLL名 `TripleTriadRoute`。作業ブランチ `fix/japanese-triad-runtime-availability`。
 
-**状態:** ローカル改修・ビルド・自動テスト済み。ゲーム内試験は未実施。GitHub上のFork: [https://github.com/MintakaSeiran/TripleTriadRoute](https://github.com/MintakaSeiran/TripleTriadRoute)。改修は上記作業ブランチに置きます。初回配布は v1.0.0.0（実機未確認のプレビュー版）です。
+**状態:** ローカル改修・ビルド・自動テスト済み。ゲーム内試験は未実施。GitHub上のFork: [https://github.com/MintakaSeiran/TripleTriadRoute](https://github.com/MintakaSeiran/TripleTriadRoute)。改修は上記作業ブランチに置きます。現在の配布は v1.0.0.1（実機未確認のプレビュー版）です。
+
+## v1.0.0.1: 通常会話だけのNPCを除外
+
+ワワラゴで通常会話を繰り返した後に停止した報告への修正。Talk表示を観測し、選択肢／対戦要求が出ないまま会話が閉じ、操作可能な状態で750ms経過した対話を数えます。同NPCで2回確認したらTriadUnavailableとして今回のセッションから除外し、Collectは代替NPCへ再計画、Farmは次のNPCへ進みます。NPC名や台詞の固定ブラックリストではありません。新規Startでは再確認します。
+
+途中に選択肢があった会話、メニューの認識失敗、対戦項目選択後の不発はこの判定に混ぜません。閉鎖不能な未知UIの安全停止は維持します。実機でのワワラゴ再試験は未実施です。
 
 ## 変更内容
 
@@ -49,7 +55,7 @@ Dalamudのカスタムプラグインリポジトリに次のURLを追加し、T
 https://raw.githubusercontent.com/MintakaSeiran/TripleTriadRoute/fix/japanese-triad-runtime-availability/repo.json
 ```
 
-リリース: https://github.com/MintakaSeiran/TripleTriadRoute/releases/tag/v1.0.0.0
+リリース: https://github.com/MintakaSeiran/TripleTriadRoute/releases/tag/v1.0.0.1
 
 開発用の導入は、ビルド出力 `TripleTriadRoute/bin/Release/TripleTriadRoute.dll` をDalamud開発用プラグインとして登録する方法です。付属DLL・Localization・Fontsを含む出力一式を保持してください。移動用外部プラグインは `/ttroute deps` で確認できます。元版と同時に自動操作を実行しないでください。
 
@@ -69,13 +75,13 @@ git submodule update --init --recursive
 & $triadDotnet test TripleTriadRoute.Tests/TripleTriadRoute.Tests.csproj -c Release
 ```
 
-Releaseビルド: 警告0、エラー0。自動テスト57件成功。初回は通信制限によるNU1301と、監査取得失敗のNU1900がありましたが、通信可能な復元で解消しました。監査は無効化していません。
+Releaseビルド: 警告0、エラー0。自動テスト60件成功。初回は通信制限によるNU1301と、監査取得失敗のNU1900がありましたが、通信可能な復元で解消しました。監査は無効化していません。
 
 テストは実ソースのメニュー判定、再計画、事前条件、セッション保持と、既存ソルバーを対象にします。ゲームサービス境界はスタブです。実Addon操作、移動IPC、Farm非同期ループ、Challenge→デッキ→対戦の統合動作を証明するものではありません。
 
 ## 配布管理
 
-v1.0.0.0のGitHubプレビューリリースへ `latest.zip` を公開し、repo.jsonにそのタグ固有のURLを登録します。数値バージョンは1.0.0.0、APIは15。ゲーム内動作は未確認のため、以下の受入確認が必要です。
+v1.0.0.1のGitHubプレビューリリースへ `latest.zip` を公開し、repo.jsonにそのタグ固有のURLを登録します。数値バージョンは1.0.0.1、APIは15。ゲーム内動作は未確認のため、以下の受入確認が必要です。
 
 今回の配布は検証済みローカルビルドを使用。上流由来の自動タグ、Discord通知、配布ハブ更新は無効のままです。CIはロジックテストのみで、自動リリースworkflowはまだ有効化していません。以後の配布もビルド・ZIP・バージョン整合を確認してから公開してください。
 

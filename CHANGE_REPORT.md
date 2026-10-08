@@ -108,3 +108,7 @@ AutoTripleTriadGrind/ → TripleTriadRoute/、AutoTripleTriadGrind.Tests/ → Tr
 ## 初回配布の追加（2026-10-08）
 
 ユーザーの配布作成依頼により、独自の幾何学アイコン（再生成スクリプト付き）、manifestのIconUrl、v1.0.0.0プレビューリリース、配布用repo.jsonと導入案内を追加。従前の「リリース未作成・アイコン未準備」はこの追記で更新する。API・数値版・ゲーム処理は変更しない。実機未確認を維持する。
+
+## v1.0.0.1（通常会話のみのNPC）
+
+TriadDialog.csにTalkHandledを追加し、AutoCommon.Triad.csで通常会話終了後750msの安定待ちと2回の独立Interactを確認。TriadMenuPolicy.csのObserveTalkOnlyでTriadUnavailableへ分類し、既存のセッション除外・再計画へ返す。AvailabilityTests.csに通常会話2回、対戦選択後、メニューと通常会話の混在の回帰テストを追加。Directory.Build.propsとrepo.jsonの版を1.0.0.1へ更新。Releaseビルド警告0・エラー0、60テスト成功。実機再確認は未実施。
