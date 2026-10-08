@@ -104,3 +104,7 @@ AutoTripleTriadGrind/ → TripleTriadRoute/、AutoTripleTriadGrind.Tests/ → Tr
 追加の実行環境メモ：最終再ビルドの制限環境ではPackagerの一時ZIP移動がAccess deniedとなり、テストホストも完了しなかったため中断した。通常権限で同じビルド・テストを実行し、警告0・エラー0、57件成功、ZIP生成と内容を再確認した。LICENSE・NOTICE等はcsprojのContentとしてZIPに含めている。
 
 一覧補足：`.github/ISSUE_TEMPLATE/translation_report.yml` も担当者をFork所有者へ変更し、元作者へ自動割当しないようにした。全内容変更は `git show --stat --find-renames` でも確認できる。ローカルの親プロジェクト文書 `docs/DEVELOPMENT.md`、`docs/BUILD_AND_DEPENDENCIES.md`、`docs/SPECIFICATION.md` は、この独立チェックアウトへの参照・仕様・検証結果を追記した（ForkのGit管理範囲外）。
+
+## 初回配布の追加（2026-10-08）
+
+ユーザーの配布作成依頼により、独自の幾何学アイコン（再生成スクリプト付き）、manifestのIconUrl、v1.0.0.0プレビューリリース、配布用repo.jsonと導入案内を追加。従前の「リリース未作成・アイコン未準備」はこの追記で更新する。API・数値版・ゲーム処理は変更しない。実機未確認を維持する。

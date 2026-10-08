@@ -7,7 +7,7 @@ https://github.com/XeldarAlz/FFXIV-AutoTripleTriadGrind
 
 元ソース: `9bc2e3f45bcf4d837b2a2ed3315a669c811421ed`（上流1.1.1.0）。改修版1.0.0.0、内部名・DLL名 `TripleTriadRoute`。作業ブランチ `fix/japanese-triad-runtime-availability`。
 
-**状態:** ローカル改修・ビルド・自動テスト済み。ゲーム内試験は未実施。GitHub上のFork: [https://github.com/MintakaSeiran/TripleTriadRoute](https://github.com/MintakaSeiran/TripleTriadRoute)。改修は上記作業ブランチに置きます。リリース配布はまだ行っていません。
+**状態:** ローカル改修・ビルド・自動テスト済み。ゲーム内試験は未実施。GitHub上のFork: [https://github.com/MintakaSeiran/TripleTriadRoute](https://github.com/MintakaSeiran/TripleTriadRoute)。改修は上記作業ブランチに置きます。初回配布は v1.0.0.0（実機未確認のプレビュー版）です。
 
 ## 変更内容
 
@@ -41,9 +41,17 @@ Farmは現在のセッションで除外済みのNPCと重複指定を除き、�
 
 プロジェクト、フォルダー、solution、テスト成果物、AssemblyName、manifest InternalName、表示名、WindowSystem ID、ウィンドウID、ログprefix、throttleキーを分離しました。Dalamudの設定・履歴ディレクトリは新InternalNameから決まり、元版の設定は自動移行しません。C# namespaceとRootNamespaceは差分を抑えるため旧名のままです。公開Plugin IDとは別で、元版の設定保存先を参照するためのものではありません。
 
-元の `Images/Icon.png` とIconUrlは除去しました。UIは既存の汎用アイコンへフォールバックします。公開前に独自の `TripleTriadRoute/Images/Icon.png` を用意し、Fork側IconUrlを設定してください。
+元画像・ゲーム素材を使わない独自のカードと経路のアイコンを `TripleTriadRoute/Images/Icon.png` に追加しました。再生成元は `scripts/New-Icon.ps1` です。
 
-現時点の導入は、ビルド出力 `TripleTriadRoute/bin/Release/TripleTriadRoute.dll` をDalamud開発用プラグインとして登録する方法です。付属DLL・Localization・Fontsを含む出力一式を保持してください。移動用外部プラグインは `/ttroute deps` で確認できます。元版と同時に自動操作を実行しないでください。
+Dalamudのカスタムプラグインリポジトリに次のURLを追加し、Triple Triad Routeを検索してください。
+
+```text
+https://raw.githubusercontent.com/MintakaSeiran/TripleTriadRoute/fix/japanese-triad-runtime-availability/repo.json
+```
+
+リリース: https://github.com/MintakaSeiran/TripleTriadRoute/releases/tag/v1.0.0.0
+
+開発用の導入は、ビルド出力 `TripleTriadRoute/bin/Release/TripleTriadRoute.dll` をDalamud開発用プラグインとして登録する方法です。付属DLL・Localization・Fontsを含む出力一式を保持してください。移動用外部プラグインは `/ttroute deps` で確認できます。元版と同時に自動操作を実行しないでください。
 
 ## ビルド・自動テスト
 
@@ -65,12 +73,11 @@ Releaseビルド: 警告0、エラー0。自動テスト57件成功。初回は�
 
 テストは実ソースのメニュー判定、再計画、事前条件、セッション保持と、既存ソルバーを対象にします。ゲームサービス境界はスタブです。実Addon操作、移動IPC、Farm非同期ループ、Challenge→デッキ→対戦の統合動作を証明するものではありません。
 
-## 公開前の残作業
+## 配布管理
 
-1. 作成済みForkの改修ブランチをレビューし、実機確認後に統合します。originは新Fork、upstreamは元リポジトリです。
-2. manifestとDirectory.Build.propsは新ForkのURLを設定済み。リリース作成後に配布用repo.jsonへ実在するダウンロードURLを設定します。現repo.jsonは空配列とし、元版のダウンロード先は除去しています。
-3. 独自アイコンと公開先を設定。元作者のDiscord通知・配布ハブ更新・自動タグを実行しないよう、継承した公開workflowは無効化しています。CIはロジックテストのみ実行します。リリースworkflowは前提未設定を明示して失敗します。
-4. 下記実機確認後にAPI 15用DLLを明示したビルド・配布workflowを設定し、LICENSE.md／NOTICE／TRADEMARK.md／THIRD-PARTY-NOTICES.mdと対応ソースを公開します。
+v1.0.0.0のGitHubプレビューリリースへ `latest.zip` を公開し、repo.jsonにそのタグ固有のURLを登録します。数値バージョンは1.0.0.0、APIは15。ゲーム内動作は未確認のため、以下の受入確認が必要です。
+
+今回の配布は検証済みローカルビルドを使用。上流由来の自動タグ、Discord通知、配布ハブ更新は無効のままです。CIはロジックテストのみで、自動リリースworkflowはまだ有効化していません。以後の配布もビルド・ZIP・バージョン整合を確認してから公開してください。
 
 ## 実機受入確認（すべて未実施）
 
